@@ -33,6 +33,8 @@ public class MainWindow {
 			shell.dispose();
 			return;
 		}
+		
+		addPlayers(game, shell);
 				
 		// TODO window layout
 
@@ -81,4 +83,9 @@ public class MainWindow {
 		_log.info("Selected game file: " + selected);
 		return selected;
 	}
+	
+	private void addPlayers(Game game, Shell shell) {
+		// TODO player setup
+	}
+	
 }
