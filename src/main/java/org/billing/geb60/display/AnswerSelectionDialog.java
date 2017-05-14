@@ -21,7 +21,7 @@ public class AnswerSelectionDialog {
 
 	private Log _log = LogFactory.getLog(getClass());
 	
-	public AnswerSelectionDialog(final Shell shell, final Game game, final Table answerTable, final Table playerTable) {
+	public AnswerSelectionDialog(final Shell shell, final Game game, final Table answerTable, final Table playerTable, final GameWindow gW) {
 		final TableItem tI = answerTable.getSelection()[0];
 		if (tI.getBackground().getRed() == 255) {
 			return;
@@ -51,7 +51,7 @@ public class AnswerSelectionDialog {
 				_log.info(Constants.WERNER + " recieved " + points + " points for answer '" + tI.getText(0) + "'!");
 				dialog.close();
 				AnswerTable.refreshAnswers(answerTable, game, false);
-				PlayerTable.refreshPoints(playerTable, game, false);
+				PlayerTable.refreshPoints(playerTable, game, false, gW);
 			}
 		};
 		wernerButton.addListener(SWT.Selection, wernerListener);
@@ -64,7 +64,7 @@ public class AnswerSelectionDialog {
 				_log.info(Constants.GERDA + " recieved " + points + " points for answer '" + tI.getText(0) + "'!");
 				dialog.close();
 				AnswerTable.refreshAnswers(answerTable, game, false);
-				PlayerTable.refreshPoints(playerTable, game, false);
+				PlayerTable.refreshPoints(playerTable, game, false, gW);
 			}
 		};
 		gerdaButton.addListener(SWT.Selection, gerdaListener);

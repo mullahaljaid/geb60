@@ -36,7 +36,7 @@ public class MainWindow {
 	public MainWindow(Display display) throws LoadingException {
 		_log.info("Creating main window!");
 		
-		final Shell shell = new Shell(display, SWT.CLOSE);
+		final Shell shell = new Shell(display, SWT.CLOSE | SWT.ON_TOP);
 		shell.setText("Mainwindow");
 		shell.open();
 		
@@ -48,7 +48,7 @@ public class MainWindow {
 		
 		addPlayers(game, shell);
 		
-		GameWindow gW = new GameWindow(shell, game);
+		GameWindow gW = new GameWindow(display, game, shell);
 		
 		doLayout(shell, game, gW);
 
@@ -67,6 +67,9 @@ public class MainWindow {
 		GridLayout layout = new GridLayout(1, false);
 		shell.setLayout(layout);
 		shell.forceActive();
+		shell.setActive();
+		shell.forceActive();
+		shell.setActive();
 		
 		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
 		gridData.horizontalSpan = 2;
@@ -80,7 +83,7 @@ public class MainWindow {
 		c.setWidth(50);
 		playerTable.setHeaderVisible(true);
 		playerTable.setLinesVisible(true);
-		PlayerTable.refreshPoints(playerTable, game, true);
+		PlayerTable.refreshPoints(playerTable, game, true, gW);
 		
 		gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
 		gridData.horizontalSpan = 2;
@@ -113,6 +116,16 @@ public class MainWindow {
 		
 		// Listeners
 		
+		Listener closeListener = new Listener() {
+			public void handleEvent(Event event) {
+				gW.closeable();
+				gW.getShell().close();
+				Display.getCurrent().dispose();
+		        event.doit = true;
+			}
+		};
+		shell.addListener(SWT.Close, closeListener);
+		
 		Listener nextQuestionListener = new Listener() {
 			public void handleEvent(Event arg0) {
 				new QuestionSelectionDialog(shell, game, questionLabel, answerTable);
@@ -123,7 +136,7 @@ public class MainWindow {
 		Listener answerSelectionListener = new Listener() {
 			
 			public void handleEvent(Event arg0) {
-				new AnswerSelectionDialog(shell, game, answerTable, playerTable);
+				new AnswerSelectionDialog(shell, game, answerTable, playerTable, gW);
 			}
 		};
 		answerTable.addListener(SWT.Selection, answerSelectionListener);

@@ -17,4 +17,12 @@ public class EmptySpace {
 		emptyLabel.setText("");
 		emptyLabel.setLayoutData(gridData);
 	}
+	
+	public EmptySpace(final Shell shell, final int count) {
+		final Label emptyLabel = new Label(shell, SWT.NONE);
+		emptyLabel.setText("");
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
+		gridData.horizontalSpan = count;
+		emptyLabel.setLayoutData(gridData);
+	}
 }
