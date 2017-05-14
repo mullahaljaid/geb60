@@ -24,6 +24,8 @@ public class Game {
 		this.players = new ArrayList<Player>();
 		
 		Arrays.fill(this.points, 0);
+		
+		this.currentQuestion = Question.NULL_QUESTION;
 	}
 	
 	public Question getNextRandomQuestion() {
@@ -34,6 +36,7 @@ public class Game {
 		int next = rand.nextInt(this.unusedQuestions.size());
 		Question q = this.unusedQuestions.get(next);
 		this.unusedQuestions.remove(q);
+		this.currentQuestion = q;
 		return q;
 	}
 	
@@ -45,13 +48,18 @@ public class Game {
 			if (this.unusedQuestions.get(i).isQuestion(quest)) {
 				Question q = this.unusedQuestions.get(i);
 				this.unusedQuestions.remove(q);
+				this.currentQuestion = q;
 				return q;
 			}
 		}
 		return null;
 	}
 	
-	public void addPlayer(Player player) {
+	public void addPlayer(String name) {
+		Player player = new Player(this.players.size(), name);
+		if (this.activePlayer == null) {
+			this.activePlayer = player;
+		}
 		if (this.players.size() < 2) {
 			this.players.add(player);
 		}
@@ -61,8 +69,12 @@ public class Game {
 		this.points[player.getId()] += pointsToAdd;
 	}
 	
-	public int[] getPoints() {
-		return this.points;
+	public int getPoints(String name) {
+		Player player = this.getPlayer(name);
+		if (player != null) {
+			return this.points[player.getId()];
+		}
+		return 0;
 	}
 	
 	public List<Question> getUnusedQuestions() {
@@ -79,5 +91,23 @@ public class Game {
 	
 	public Player getActivePlayer() {
 		return this.activePlayer;
+	}
+	
+	public void nextPlayer() {
+		for (Player play : this.players) {
+			if (play.getId() != this.getActivePlayer().getId()) {
+				this.activePlayer = play;
+				return;
+			}
+		}
+	}
+	
+	public Player getPlayer(final String name) {
+		for (Player p : this.players) {
+			if (p.getName().equals(name)) {
+				return p;
+			}
+		}
+		return null;
 	}
 }

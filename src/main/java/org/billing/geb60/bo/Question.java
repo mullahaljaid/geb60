@@ -47,4 +47,15 @@ public class Question {
 			return ans2.getPoints() - ans1.getPoints();
 		}
 	}
+	
+	public int giveAnswer(String answer) {
+		for (Answer a : this.answers) {
+			if (a.getAnswer().equals(answer)) {
+				return a.give();
+			}
+		}
+		return 0;
+	}
+	
+	public static final Question NULL_QUESTION = new Question("Noch keine Frage ausgewählt!");
 }
