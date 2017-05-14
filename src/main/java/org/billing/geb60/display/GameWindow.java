@@ -4,17 +4,22 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.billing.geb60.bo.Game;
 import org.billing.geb60.display.helpers.EmptySpace;
+import org.billing.geb60.util.Constants;
+import org.eclipse.jface.layout.TableColumnLayout;
+import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 
 public class GameWindow {
 
@@ -37,6 +42,7 @@ public class GameWindow {
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 5;
 		shell.setLayout(gridLayout);
+		shell.setMaximized(true);
 		
 		font = shell.getFont();
 		
@@ -47,25 +53,38 @@ public class GameWindow {
 		questionLabel.setText("\n\n ");
 		
 		// TODO Answertable
-		answerTable = new Table(shell, SWT.BORDER);
+		Composite tableComposite = new Composite(shell, SWT.NONE);
 		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gridData.horizontalSpan = 5;
 		gridData.verticalSpan = 5;
-		answerTable.setLayoutData(gridData);
+		tableComposite.setLayoutData(gridData);
+		answerTable = new Table(tableComposite, SWT.BORDER);
+		answerTable.setHeaderVisible(true);
+		answerTable.setLinesVisible(true);
+		TableColumn c1 = new TableColumn(answerTable, SWT.NONE);
+		c1.setText("Antwort");
+		TableColumn c2 = new TableColumn(answerTable, SWT.NONE);
+		c2.setText("Punkte");
+		c2.setAlignment(SWT.RIGHT);
 		
-		pointsWernerLabel = new Label(shell, SWT.SINGLE | SWT.BORDER);
+		TableColumnLayout layout = new TableColumnLayout();
+		layout.setColumnData(c1, new ColumnWeightData(200, 500, true));
+		layout.setColumnData(c2, new ColumnWeightData(20, 50, true));
+		tableComposite.setLayout(layout);
+		
+		pointsWernerLabel = new Label(shell, SWT.BORDER);
 		gridData = new GridData(SWT.FILL, SWT.FILL, false, false);
 		gridData.horizontalSpan = 1;
 		pointsWernerLabel.setLayoutData(gridData);
-		pointsWernerLabel.setText("0     ");
+		pointsWernerLabel.setText(Constants.WERNER + "\n0     ");
 		
 		new EmptySpace(shell, 3);
 		
-		pointsGerdaLabel = new Label(shell, SWT.SINGLE | SWT.BORDER | SWT.RIGHT);
+		pointsGerdaLabel = new Label(shell, SWT.BORDER | SWT.RIGHT);
 		gridData = new GridData(SWT.FILL, SWT.FILL, false, false);
 		gridData.horizontalSpan = 1;
 		pointsGerdaLabel.setLayoutData(gridData);
-		pointsGerdaLabel.setText("     0");
+		pointsGerdaLabel.setText(Constants.GERDA + "\n     0");
 		
 		
 		// Listeners
@@ -76,9 +95,9 @@ public class GameWindow {
 		};
 		shell.addListener(SWT.Close, closeListener);
 		
-		setFontSize(35);
-		
-		shell.pack();
+		setFontSize(40);
+		c1.pack();
+		c2.pack();
 		shell.open();
 	}
 	
@@ -104,8 +123,8 @@ public class GameWindow {
 	
 	public void resize() {
 		int y = shell.getSize().y;
-		setFontSize(y / 20);
-		shell.pack();
+		setFontSize(y / 30);
+//		shell.pack();
 	}
 	
 	private void setFontSize(int size) {

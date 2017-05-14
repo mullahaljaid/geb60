@@ -19,7 +19,7 @@ public class QuestionSelectionDialog {
 	
 	private Log _log = LogFactory.getLog(getClass());
 
-	public QuestionSelectionDialog(final Shell shell, final Game game, final Text questionLabel, final Table answerTable) {
+	public QuestionSelectionDialog(final Shell shell, final Game game, final Text questionLabel, final Table answerTable, final GameWindow gW) {
 		final Shell dialog = new Shell(shell, SWT.APPLICATION_MODAL | SWT.DIALOG_TRIM);
 		dialog.setText("Nächste Frage?");
 		
@@ -38,7 +38,8 @@ public class QuestionSelectionDialog {
 				String questionString = questionList.getItem(selection[0]);
 				game.getNextQuestion(questionString);
 				questionLabel.setText(questionString);
-				AnswerTable.refreshAnswers(answerTable, game, false);
+				gW.getQuestionLabel().setText(questionString);
+				AnswerTable.refreshAnswers(answerTable, game, false, gW);
 				_log.info("Next question: " + questionString);
 				dialog.close();
 			}

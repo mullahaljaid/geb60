@@ -50,7 +50,7 @@ public class AnswerSelectionDialog {
 				game.addPoint(game.getPlayer(Constants.WERNER), points);
 				_log.info(Constants.WERNER + " recieved " + points + " points for answer '" + tI.getText(0) + "'!");
 				dialog.close();
-				AnswerTable.refreshAnswers(answerTable, game, false);
+				AnswerTable.refreshAnswers(answerTable, game, false, gW);
 				PlayerTable.refreshPoints(playerTable, game, false, gW);
 			}
 		};
@@ -63,7 +63,7 @@ public class AnswerSelectionDialog {
 				game.addPoint(game.getPlayer(Constants.GERDA), points);
 				_log.info(Constants.GERDA + " recieved " + points + " points for answer '" + tI.getText(0) + "'!");
 				dialog.close();
-				AnswerTable.refreshAnswers(answerTable, game, false);
+				AnswerTable.refreshAnswers(answerTable, game, false, gW);
 				PlayerTable.refreshPoints(playerTable, game, false, gW);
 			}
 		};
@@ -75,7 +75,7 @@ public class AnswerSelectionDialog {
 				int points = game.getCurrentQuestion().giveAnswer(tI.getText(0));
 				_log.info("Nobody recieved " + points + " points for answer '" + tI.getText(0) + "'!");
 				dialog.close();
-				AnswerTable.refreshAnswers(answerTable, game, false);
+				AnswerTable.refreshAnswers(answerTable, game, false, gW);
 			}
 		};
 		nobodyButton.addListener(SWT.Selection, nobodyListener);

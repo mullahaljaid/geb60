@@ -20,8 +20,8 @@ public class PlayerTable {
 		tI.setText(0, Constants.GERDA);
 		tI.setText(1, "" + game.getPoints(Constants.GERDA));
 		
-		gW.getPointsWernerLabel().setText("" + game.getPoints(Constants.WERNER));
-		gW.getPointsGerdaLabel().setText("" + game.getPoints(Constants.GERDA));
+		gW.getPointsWernerLabel().setText(Constants.WERNER + "\n" + game.getPoints(Constants.WERNER));
+		gW.getPointsGerdaLabel().setText(Constants.GERDA + "\n" + game.getPoints(Constants.GERDA));
 		gW.resize();
 		
 		if (first) {

@@ -112,7 +112,7 @@ public class MainWindow {
 		c.setWidth(50);
 		answerTable.setHeaderVisible(true);
 		answerTable.setLinesVisible(true);
-		AnswerTable.refreshAnswers(answerTable, game, true);
+		AnswerTable.refreshAnswers(answerTable, game, true, gW);
 		
 		// Listeners
 		
@@ -128,7 +128,7 @@ public class MainWindow {
 		
 		Listener nextQuestionListener = new Listener() {
 			public void handleEvent(Event arg0) {
-				new QuestionSelectionDialog(shell, game, questionLabel, answerTable);
+				new QuestionSelectionDialog(shell, game, questionLabel, answerTable, gW);
 			}
 		};
 		nextQuestionButton.addListener(SWT.Selection, nextQuestionListener);
