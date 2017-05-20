@@ -48,10 +48,18 @@ public class Question {
 		}
 	}
 	
-	public int giveAnswer(String answer) {
+	public void giveAnswer(String answer) {
 		for (Answer a : this.answers) {
 			if (a.getAnswer().equals(answer)) {
-				return a.give();
+				a.give();
+			}
+		}
+	}
+	
+	public int giveAnserPoints(String answer) {
+		for (Answer a : this.answers) {
+			if (a.getAnswer().equals(answer)) {
+				return a.givePoints();
 			}
 		}
 		return 0;

@@ -7,6 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.billing.geb60.bo.Game;
 import org.billing.geb60.display.helpers.AnswerTable;
+import org.billing.geb60.display.helpers.AudioHelper;
 import org.billing.geb60.display.helpers.EmptySpace;
 import org.billing.geb60.display.helpers.PlayerTable;
 import org.billing.geb60.exceptions.LoadingException;
@@ -19,11 +20,11 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.Text;
 
 public class MainWindow {
 
@@ -32,6 +33,11 @@ public class MainWindow {
 	 */
 	
 	private Log _log = LogFactory.getLog(getClass());
+	
+	private Table answerTable;
+	private Table playerTable;
+	
+	private Label questionLabel;
 	
 	public MainWindow(Display display) throws LoadingException {
 		_log.info("Creating main window!");
@@ -48,9 +54,13 @@ public class MainWindow {
 		
 		addPlayers(game, shell);
 		
-		GameWindow gW = new GameWindow(display, game, shell);
+		GameWindow gW = new GameWindow(display, game);
+		game.setGameWindow(gW);
 		
-		doLayout(shell, game, gW);
+		doLayout(display, shell, game, gW);
+		
+		gW.setFontSize(55);
+		gW.setTableLayout();
 
 		while (!display.isDisposed()) {
 			try {
@@ -62,8 +72,20 @@ public class MainWindow {
 			}
 		}
 	}
+	
+	public Table getAnswerTable() {
+		return this.answerTable;
+	}
+	
+	public Table getPlayerTable() {
+		return this.playerTable;
+	}
+	
+	public Label getQuestionLabel() {
+		return this.questionLabel;
+	}
 
-	private void doLayout(final Shell shell, final Game game, final GameWindow gW) {
+	private void doLayout(final Display display, final Shell shell, final Game game, final GameWindow gW) {
 		GridLayout layout = new GridLayout(1, false);
 		shell.setLayout(layout);
 		shell.forceActive();
@@ -73,7 +95,7 @@ public class MainWindow {
 		
 		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
 		gridData.horizontalSpan = 2;
-		final Table playerTable = new Table(shell, SWT.BORDER);
+		playerTable = new Table(shell, SWT.BORDER);
 		playerTable.setLayoutData(gridData);
 		TableColumn c = new TableColumn(playerTable, SWT.NONE);
 		c.setText("Spieler");
@@ -83,26 +105,38 @@ public class MainWindow {
 		c.setWidth(50);
 		playerTable.setHeaderVisible(true);
 		playerTable.setLinesVisible(true);
-		PlayerTable.refreshPoints(playerTable, game, true, gW);
+		PlayerTable.refreshPoints(game, true);
 		
 		gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
 		gridData.horizontalSpan = 2;
+		
+		final Button sizeButton = new Button(shell, SWT.PUSH);
+		sizeButton.setText("Größe des Spieldialogs anpassen!");
+		sizeButton.setLayoutData(gridData);
+		
 		new EmptySpace(shell, gridData);
 		
-		final Text questionLabel = new Text(shell, SWT.WRAP);
+		questionLabel = new Label(shell, SWT.WRAP);
 		questionLabel.setText(game.getCurrentQuestion().toString());
-		questionLabel.setEditable(false);
 		gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
 		gridData.horizontalSpan = 2;
 		gridData.heightHint = 50;
 		questionLabel.setLayoutData(gridData);
 		
+		gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
+		gridData.horizontalSpan = 2;
+		
 		final Button nextQuestionButton = new Button(shell, SWT.PUSH);
 		nextQuestionButton.setText("Nächste Frage");
+		nextQuestionButton.setLayoutData(gridData);
+		
+		final Button wrongAnswer = new Button(shell, SWT.PUSH);
+		wrongAnswer.setText("Falsche Antwort!");
+		wrongAnswer.setLayoutData(gridData);
 		
 		gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
 		gridData.horizontalSpan = 2;
-		final Table answerTable = new Table(shell, SWT.BORDER | SWT.FULL_SELECTION);
+		answerTable = new Table(shell, SWT.BORDER | SWT.FULL_SELECTION);
 		answerTable.setLayoutData(gridData);
 		c = new TableColumn(answerTable, SWT.NONE);
 		c.setText("Antwort");
@@ -112,10 +146,9 @@ public class MainWindow {
 		c.setWidth(50);
 		answerTable.setHeaderVisible(true);
 		answerTable.setLinesVisible(true);
-		AnswerTable.refreshAnswers(answerTable, game, true, gW);
+		AnswerTable.refreshAnswers(game, true);
 		
 		// Listeners
-		
 		Listener closeListener = new Listener() {
 			public void handleEvent(Event event) {
 				gW.closeable();
@@ -126,17 +159,31 @@ public class MainWindow {
 		};
 		shell.addListener(SWT.Close, closeListener);
 		
+		Listener gWSizeListener = new Listener() {
+			public void handleEvent(Event arg0) {
+				new GameWindowLayoutWindow(display, gW);
+			}
+		};
+		sizeButton.addListener(SWT.Selection, gWSizeListener);
+		
 		Listener nextQuestionListener = new Listener() {
 			public void handleEvent(Event arg0) {
-				new QuestionSelectionDialog(shell, game, questionLabel, answerTable, gW);
+				new QuestionSelectionDialog(shell, game);
 			}
 		};
 		nextQuestionButton.addListener(SWT.Selection, nextQuestionListener);
 		
+		Listener wrongAnserListener = new Listener() {
+			public void handleEvent(Event event) {
+				AudioHelper.playFail();
+			}
+		};
+		wrongAnswer.addListener(SWT.Selection, wrongAnserListener);
+		
 		Listener answerSelectionListener = new Listener() {
 			
 			public void handleEvent(Event arg0) {
-				new AnswerSelectionDialog(shell, game, answerTable, playerTable, gW);
+				new AnswerSelectionDialog(shell, game);
 			}
 		};
 		answerTable.addListener(SWT.Selection, answerSelectionListener);
@@ -159,7 +206,7 @@ public class MainWindow {
         // Load game
 		try {
 			URL gameUrl = new URL("file:\\" + fileName);
-			Game game = new Game(ResourceLoader.getInstance().getQuestions(gameUrl));
+			Game game = new Game(ResourceLoader.getInstance().getQuestions(gameUrl), this);
 	        _log.info("Game file loaded: " + gameUrl.toString());
 	        return game;
 		} catch (MalformedURLException e1) {
@@ -182,6 +229,5 @@ public class MainWindow {
 	private void addPlayers(Game game, Shell shell) {
 		game.addPlayer(Constants.WERNER);
 		game.addPlayer(Constants.GERDA);
-		// TODO player setup
 	}
 }

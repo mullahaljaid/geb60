@@ -5,11 +5,13 @@ public class Answer {
 	private String answer;
 	private int points;
 	private boolean alreadyGiven;
+	private boolean alreadyPoints;
 	
 	public Answer(String answer, int points) {
 		this.answer = answer;
 		this.points = points;
 		this.alreadyGiven = false;
+		this.alreadyPoints = false;
 	}
 	
 	public String getAnswer() {
@@ -24,11 +26,21 @@ public class Answer {
 		return alreadyGiven;
 	}
 	
-	public int give() {
-		if (this.alreadyGiven) {
+	public boolean wasAlreadyPoints() {
+		return alreadyPoints;
+	}
+	
+	public void give() {
+		if (!this.alreadyGiven) {
+			this.alreadyGiven = true;
+		}
+	}
+	
+	public int givePoints() {
+		if (this.alreadyPoints) {
 			return 0;
 		} else {
-			this.alreadyGiven = true;
+			this.alreadyPoints = true;
 			return this.points;
 		}
 	}

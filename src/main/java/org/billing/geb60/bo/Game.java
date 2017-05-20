@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import org.billing.geb60.display.GameWindow;
+import org.billing.geb60.display.MainWindow;
+
 public class Game {
 
 	private List<Question> allQuestions;
@@ -15,9 +18,12 @@ public class Game {
 	
 	private Question currentQuestion;
 	
+	private MainWindow mainWindow = null;
+	private GameWindow gameWindow = null;
+	
 	private int[] points = new int[2];
 	
-	public Game(List<Question> list) {
+	public Game(List<Question> list, MainWindow mainWindow) {
 		this.allQuestions = list;
 		this.unusedQuestions = new ArrayList<Question>(list);
 		
@@ -26,6 +32,19 @@ public class Game {
 		Arrays.fill(this.points, 0);
 		
 		this.currentQuestion = Question.NULL_QUESTION;
+		this.mainWindow = mainWindow;
+	}
+	
+	public void setGameWindow(GameWindow gameWindow) {
+		this.gameWindow = gameWindow;
+	}
+	
+	public GameWindow getGameWindow() {
+		return this.gameWindow;
+	}
+	
+	public MainWindow getMainWindow() {
+		return this.mainWindow;
 	}
 	
 	public Question getNextRandomQuestion() {
@@ -66,7 +85,9 @@ public class Game {
 	}
 	
 	public void addPoint(Player player, int pointsToAdd) {
-		this.points[player.getId()] += pointsToAdd;
+		if (player != null) {
+			this.points[player.getId()] += pointsToAdd;
+		}
 	}
 	
 	public int getPoints(String name) {
