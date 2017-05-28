@@ -73,17 +73,19 @@ public class AnswerSelectionDialog {
 			dialog.close();
 			AudioHelper.playWin();
 			AnswerTable.refreshAnswers(game, false);
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				// DO nothing
-			}
-			int points = game.getCurrentQuestion().giveAnserPoints(answerText);
-			game.addPoint(game.getPlayer(player), points);
-			_log.info(player + " recieved " + points + " points for answer '" + answerText + "'!");
-			AudioHelper.playPoints();
-			AnswerTable.refreshAnswers(game, false);
-			PlayerTable.refreshPoints(game, false);
+			
+			game.getDisplay().timerExec(2000, new Runnable() {
+				
+				@Override
+				public void run() {
+					int points = game.getCurrentQuestion().giveAnserPoints(answerText);
+					game.addPoint(game.getPlayer(player), points);
+					_log.info(player + " recieved " + points + " points for answer '" + answerText + "'!");
+					AudioHelper.playPoints();
+					AnswerTable.refreshAnswers(game, false);
+					PlayerTable.refreshPoints(game, false);
+				}
+			});
 		}
 	}
 }

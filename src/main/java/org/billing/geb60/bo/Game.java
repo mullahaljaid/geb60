@@ -7,6 +7,7 @@ import java.util.Random;
 
 import org.billing.geb60.display.GameWindow;
 import org.billing.geb60.display.MainWindow;
+import org.eclipse.swt.widgets.Display;
 
 public class Game {
 
@@ -18,12 +19,13 @@ public class Game {
 	
 	private Question currentQuestion;
 	
+	private Display display = null;
 	private MainWindow mainWindow = null;
 	private GameWindow gameWindow = null;
 	
 	private int[] points = new int[2];
 	
-	public Game(List<Question> list, MainWindow mainWindow) {
+	public Game(List<Question> list, Display display, MainWindow mainWindow) {
 		this.allQuestions = list;
 		this.unusedQuestions = new ArrayList<Question>(list);
 		
@@ -32,6 +34,7 @@ public class Game {
 		Arrays.fill(this.points, 0);
 		
 		this.currentQuestion = Question.NULL_QUESTION;
+		this.display = display;
 		this.mainWindow = mainWindow;
 	}
 	
@@ -45,6 +48,10 @@ public class Game {
 	
 	public MainWindow getMainWindow() {
 		return this.mainWindow;
+	}
+	
+	public Display getDisplay() {
+		return this.display;
 	}
 	
 	public Question getNextRandomQuestion() {

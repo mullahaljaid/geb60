@@ -206,7 +206,7 @@ public class MainWindow {
         // Load game
 		try {
 			URL gameUrl = new URL("file:\\" + fileName);
-			Game game = new Game(ResourceLoader.getInstance().getQuestions(gameUrl), this);
+			Game game = new Game(ResourceLoader.getInstance().getQuestions(gameUrl), shell.getDisplay(), this);
 	        _log.info("Game file loaded: " + gameUrl.toString());
 	        return game;
 		} catch (MalformedURLException e1) {
