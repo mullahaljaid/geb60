@@ -21,7 +21,7 @@ public class ResourceLoaderTest extends MainTestCase {
 		initTest(_log);
 		URL testUrl = getResource(ResourceLoader.DEFAULT_RESOURCE);
 		List<Question> list = ResourceLoader.getInstance().getQuestions(testUrl);
-		Assert.assertTrue("Should be 2 questions!", list.size() == 2);
+		Assert.assertTrue("Should be 3 questions!", list.size() == 3);
 		closeTest(_log);
 	}
 	
