@@ -160,6 +160,8 @@ public class GameWindow {
 	}
 	
 	public void setTableLayout() {
+		String questionText = questionLabel.getText();
+		questionLabel.setText("\n\n ");
 		TableColumnLayout layout = new TableColumnLayout();
 		int x = shell.getSize().x;
 		layout.setColumnData(ch1, new ColumnPixelData((int)((x - 30) * 0.04)));
@@ -172,6 +174,7 @@ public class GameWindow {
 		tableComposite.setLayout(layout);
 		shell.pack();
 		shell.setMaximized(true);
+		questionLabel.setText(questionText);
 	}
 	
 	public void closeable() {
