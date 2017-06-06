@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.billing.geb60.bo.Game;
 import org.billing.geb60.bo.Question;
 import org.billing.geb60.display.helpers.AnswerTable;
+import org.billing.geb60.display.helpers.AudioHelper;
 import org.billing.geb60.display.helpers.CancelButton;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -39,6 +40,7 @@ public class QuestionSelectionDialog {
 				game.getGameWindow().getQuestionLabel().setText(questionString);
 				AnswerTable.refreshAnswers(game, false);
 				_log.info("Next question: " + questionString);
+				AudioHelper.playWin();
 				dialog.close();
 			}
 		});
