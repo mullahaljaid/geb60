@@ -68,7 +68,7 @@ public class GameWindow {
 		gridData.horizontalSpan = 5;
 		gridData.verticalSpan = 1;
 		tableHeaderComposite.setLayoutData(gridData);
-		answerHeaderTable = new Table(tableHeaderComposite, SWT.BORDER);
+		answerHeaderTable = new Table(tableHeaderComposite, SWT.NONE);
 		answerHeaderTable.setHeaderVisible(false);
 		ch1 = new TableColumn(answerHeaderTable, SWT.NONE);
 		ch2 = new TableColumn(answerHeaderTable, SWT.NONE);
@@ -164,10 +164,10 @@ public class GameWindow {
 		questionLabel.setText("\n\n ");
 		TableColumnLayout layout = new TableColumnLayout();
 		int x = shell.getSize().x;
-		layout.setColumnData(ch1, new ColumnPixelData((int)((x - 30) * 0.035)));
+		layout.setColumnData(ch1, new ColumnPixelData((int)((x - 30) * 0.04)));
 		layout.setColumnData(ch2, new ColumnPixelData((int)((x - 30) * 0.82)));
 		layout.setColumnData(ch3, new ColumnPixelData((int)((x - 30) * 0.14)));
-		layout.setColumnData(c1, new ColumnPixelData((int)((x - 30) * 0.035)));
+		layout.setColumnData(c1, new ColumnPixelData((int)((x - 30) * 0.04)));
 		layout.setColumnData(c2, new ColumnPixelData((int)((x - 30) * 0.82)));
 		layout.setColumnData(c3, new ColumnPixelData((int)((x - 30) * 0.14)));
 		tableHeaderComposite.setLayout(layout);
